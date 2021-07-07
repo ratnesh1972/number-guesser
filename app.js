@@ -25,34 +25,28 @@ function checkAns() {
         let guessedNumber = guessedInput.value;
         if (guessedNumber === '') {
             // Display error msg
-            resultMsg.style.display = 'block';
-            resultMsg.innerText = 'Please Enter valid number!';
-            resultMsg.className = 'wrong-text';
+            displayStatus('Please Enter valid number!');
+
         } else {
             if (guessedNumber == correctNumber) {
                 //Set isWinner to true.
                 isWinner = true;
                 //Check chances left.
-                if ((chanceLeft - 1) >= 0) {
-                    chanceLeft -= 1;
-                } else {
-                    chanceLeft = -1;
-                }
+                chanceLeft -= 1;
                 //Display correct ans.
-                correctAns(chanceLeft);
+                displayResult('correct', 'correct-text', `Yes! Your answer is correct. You won with ${chanceLeft} chances left.`);
             } else {
                 //Check chances left.
-                if ((chanceLeft - 1) == 0) {
+                chanceLeft -= 1;
+
+                if (chanceLeft == 0) {
                     //Set chanceleft to -1
                     chanceLeft = -1;
                     //Display wrong answer.
-                    wrongAns(correctNumber);
+                    displayResult('wrong', 'wrong-text', `Wrong! Correct answer was ${correctNumber}.`);
                 } else {
-                    chanceLeft -= 1;
                     //Display chances left msg.
-                    resultMsg.style.display = 'block';
-                    resultMsg.className = 'wrong-text';
-                    resultMsg.innerText = `Wrong! you still have ${chanceLeft} chances left.`;
+                    displayStatus(`Wrong! you still have ${chanceLeft} chances left.`);
                 }
             }
         }
@@ -78,26 +72,21 @@ function resetPlay() {
 
 }
 
-function correctAns(chances) {
+function displayResult(inputClass, resultClass, msg) {
     //Disable input feild  & change border color.
     guessedInput.setAttribute('disabled', 'disabled');
-    guessedInput.classList.add('correct');
+    guessedInput.classList.add(inputClass);
     //Display msg
     resultMsg.style.display = 'block';
-    resultMsg.className = 'correct-text';
-    resultMsg.innerText = `Yes! Your guess is correct, you won with ${chances} chances left.`;
+    resultMsg.className = resultClass;
+    resultMsg.innerText = msg;
     //Change submit button text
     playBtn.value = 'PLAY AGAIN'
 }
 
-function wrongAns(correctNum) {
-    //Disable input feild  & change border color.
-    guessedInput.setAttribute('disabled', 'disabled');
-    guessedInput.classList.add('wrong');
-    //Display msg
+function displayStatus(msg) {
+    //Display chances left msg.
     resultMsg.style.display = 'block';
     resultMsg.className = 'wrong-text';
-    resultMsg.innerText = `Wrong! Correct answer was  ${correctNum}.`;
-    //Change submit button text
-    playBtn.value = 'PLAY AGAIN';
+    resultMsg.innerText = msg;
 }
